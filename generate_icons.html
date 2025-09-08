@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生成插件图标</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .icon-container {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+        }
+        .icon {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            padding: 10px;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .download-btn {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: #3B82F6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chrome插件图标生成器</h1>
+    <p>点击下载按钮保存图标到icons文件夹</p>
+    
+    <div class="icon-container">
+        <div class="icon">
+            <canvas id="icon16" width="16" height="16"></canvas>
+            <div>16x16</div>
+            <button class="download-btn" onclick="downloadIcon('icon16', 16)">下载</button>
+        </div>
+    </div>
+    
+    <div class="icon-container">
+        <div class="icon">
+            <canvas id="icon48" width="48" height="48"></canvas>
+            <div>48x48</div>
+            <button class="download-btn" onclick="downloadIcon('icon48', 48)">下载</button>
+        </div>
+    </div>
+    
+    <div class="icon-container">
+        <div class="icon">
+            <canvas id="icon128" width="128" height="128"></canvas>
+            <div>128x128</div>
+            <button class="download-btn" onclick="downloadIcon('icon128', 128)">下载</button>
+        </div>
+    </div>
+
+    <script>
+        // 绘制图标
+        function drawIcon(canvasId, size) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            // 清空画布
+            ctx.clearRect(0, 0, size, size);
+            
+            // 计算缩放比例
+            const scale = size / 128;
+            
+            // 背景圆形
+            ctx.beginPath();
+            ctx.arc(size/2, size/2, (60 * scale), 0, 2 * Math.PI);
+            ctx.fillStyle = '#3B82F6';
+            ctx.fill();
+            ctx.strokeStyle = '#2563EB';
+            ctx.lineWidth = 4 * scale;
+            ctx.stroke();
+            
+            // 文本线条
+            ctx.fillStyle = 'white';
+            
+            // 第一行
+            ctx.fillRect(32 * scale, 40 * scale, 64 * scale, 8 * scale);
+            // 第二行
+            ctx.fillRect(32 * scale, 56 * scale, 48 * scale, 8 * scale);
+            // 第三行
+            ctx.fillRect(32 * scale, 72 * scale, 56 * scale, 8 * scale);
+            
+            // AI装饰点
+            ctx.fillStyle = '#10B981';
+            ctx.beginPath();
+            ctx.arc(88 * scale, 48 * scale, 6 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            ctx.fillStyle = '#F59E0B';
+            ctx.beginPath();
+            ctx.arc(96 * scale, 56 * scale, 4 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            ctx.fillStyle = '#EF4444';
+            ctx.beginPath();
+            ctx.arc(92 * scale, 68 * scale, 3 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+        
+        // 下载图标
+        function downloadIcon(canvasId, size) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.download = `icon${size}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        // 页面加载完成后绘制所有图标
+        window.onload = function() {
+            drawIcon('icon16', 16);
+            drawIcon('icon48', 48);
+            drawIcon('icon128', 128);
+        };
+    </script>
+</body>
+</html>

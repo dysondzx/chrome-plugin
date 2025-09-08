@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能文本助手 - 测试页面</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: #f9fafb;
+        }
+        .test-section h2 {
+            color: #3b82f6;
+            margin-top: 0;
+        }
+        .highlight {
+            background: #fef3c7;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .instructions {
+            background: #dbeafe;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3b82f6;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e40af;
+        }
+        .instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>智能文本助手 - 功能测试页面</h1>
+    
+    <div class="instructions">
+        <h3>测试说明</h3>
+        <ol>
+            <li>确保已安装并启用"智能文本助手"Chrome插件</li>
+            <li>在下方文本中选中任意内容</li>
+            <li>观察悬浮面板是否正常显示</li>
+            <li>测试各个功能按钮是否正常工作</li>
+            <li>检查API配置是否正确（需要有效的Kimi API Key）</li>
+            <li><strong>重要：</strong> 如果结果一闪而过，请检查浏览器控制台是否有错误信息</li>
+        </ol>
+    </div>
+    
+    <div class="instructions" style="background: #fef2f2; border-color: #fca5a5;">
+        <h3>🔧 调试信息</h3>
+        <p>如果遇到问题，请：</p>
+        <ol>
+            <li>按F12打开开发者工具</li>
+            <li>查看Console标签页的错误信息</li>
+            <li>检查Network标签页的API请求状态</li>
+            <li>确认插件已正确加载（在chrome://extensions/页面检查）</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>📖 解释功能测试</h2>
+        <p>请选中以下专业术语进行解释测试：</p>
+        <p>人工智能（Artificial Intelligence，简称AI）是计算机科学的一个分支，它企图了解智能的实质，并生产出一种新的能以人类智能相似的方式做出反应的智能机器。</p>
+        <p>机器学习是人工智能的核心，它使计算机能够在没有明确编程的情况下学习和改进。</p>
+        <p>深度学习是机器学习的一个子集，它使用多层神经网络来模拟人脑的工作方式。</p>
+    </div>
+
+    <div class="test-section">
+        <h2>🌐 翻译功能测试</h2>
+        <p>请选中以下中英文文本进行翻译测试：</p>
+        <p><span class="highlight">中文测试文本：</span> 这是一个用于测试翻译功能的中文句子。它包含了多个词汇和语法结构，可以很好地验证翻译的准确性。</p>
+        <p><span class="highlight">English test text:</span> This is an English sentence for testing the translation function. It contains multiple words and grammatical structures that can well verify the accuracy of translation.</p>
+        <p><span class="highlight">混合文本：</span> Hello World! 你好世界！This is a mixed language text. 这是混合语言文本。</p>
+    </div>
+
+    <div class="test-section">
+        <h2>🔊 朗读功能测试</h2>
+        <p>请选中以下文本进行朗读测试：</p>
+        <p><span class="highlight">中文朗读：</span> 春眠不觉晓，处处闻啼鸟。夜来风雨声，花落知多少。</p>
+        <p><span class="highlight">English reading:</span> The quick brown fox jumps over the lazy dog. This sentence contains every letter of the alphabet.</p>
+        <p><span class="highlight">数字和符号：</span> 1234567890 !@#$%^&*() 测试数字和特殊符号的朗读效果。</p>
+    </div>
+
+    <div class="test-section">
+        <h2>✨ 润色功能测试</h2>
+        <p>请选中以下需要润色的文本：</p>
+        <p><span class="highlight">简单句子：</span> 这个产品很好用。</p>
+        <p><span class="highlight">复杂句子：</span> 我觉得这个软件的功能很强大，但是界面设计有点复杂，用户体验不是很好，希望能改进一下。</p>
+        <p><span class="highlight">商务邮件：</span> 你好，我想了解一下你们公司的产品，请给我发一些资料，谢谢。</p>
+        <p><span class="highlight">技术文档：</span> 这个API可以获取用户信息，返回JSON格式的数据，包含用户名、邮箱等字段。</p>
+    </div>
+
+    <div class="test-section">
+        <h2>🔧 边界情况测试</h2>
+        <p>测试各种边界情况：</p>
+        <p><span class="highlight">单个字符：</span> 选 中 这 些 单 个 字 符</p>
+        <p><span class="highlight">长文本：</span> 这是一段很长的文本，用来测试插件在处理长文本时的表现。它包含了多个句子和段落，可以验证插件是否能够正确处理较长的文本内容，以及是否会出现界面布局问题或性能问题。请选中整段文本进行测试，观察插件的响应速度和界面显示效果。</p>
+        <p><span class="highlight">特殊字符：</span> @#$%^&*()_+-=[]{}|;':",./<>?`~ 测试特殊字符的处理</p>
+        <p><span class="highlight">换行文本：</span> 这是第一行文本<br>这是第二行文本<br>这是第三行文本</p>
+    </div>
+
+    <div class="test-section">
+        <h2>📱 响应式测试</h2>
+        <p>请调整浏览器窗口大小，测试不同屏幕尺寸下的显示效果：</p>
+        <ul>
+            <li>小屏幕（< 768px）：面板宽度应为280px</li>
+            <li>中等屏幕（768px - 1024px）：面板宽度应为320px</li>
+            <li>大屏幕（> 1024px）：面板宽度应为360px</li>
+        </ul>
+        <p>选中任意文本，观察面板在不同屏幕尺寸下的显示效果。</p>
+    </div>
+
+    <div class="test-section">
+        <h2>⚡ 性能测试</h2>
+        <p>测试插件的性能表现：</p>
+        <ol>
+            <li>快速连续选中不同文本，观察面板响应速度</li>
+            <li>在长页面中选中文本，检查面板定位是否准确</li>
+            <li>测试多个功能按钮的切换速度</li>
+            <li>观察内存使用情况（打开开发者工具查看）</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>🐛 错误处理测试</h2>
+        <p>测试错误情况的处理：</p>
+        <ol>
+            <li>未配置API Key时使用需要API的功能</li>
+            <li>网络断开时测试API调用</li>
+            <li>输入无效的API Key测试错误提示</li>
+            <li>测试超长文本的处理</li>
+        </ol>
+    </div>
+
+    <footer style="margin-top: 50px; padding: 20px; text-align: center; color: #6b7280; border-top: 1px solid #e5e7eb;">
+        <p>智能文本助手 Chrome 插件测试页面</p>
+        <p>如果遇到问题，请检查插件配置和网络连接</p>
+    </footer>
+</body>
+</html>

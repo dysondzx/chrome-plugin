@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智能文本助手</title>
+  <style>
+    body {
+      width: 300px;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      background: #f9fafb;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .header h1 {
+      font-size: 18px;
+      color: #111827;
+      margin: 0;
+    }
+    
+    .info-section {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .info-section h3 {
+      font-size: 14px;
+      color: #374151;
+      margin: 0 0 12px 0;
+    }
+    
+    .config-info {
+      background: #dbeafe;
+      border: 1px solid #3b82f6;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 12px;
+      color: #1e40af;
+      margin-bottom: 12px;
+    }
+    
+    .config-info h4 {
+      margin: 0 0 8px 0;
+      font-size: 13px;
+    }
+    
+    .instructions {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 12px;
+      color: #92400e;
+    }
+    
+    .instructions h4 {
+      margin: 0 0 8px 0;
+      font-size: 13px;
+    }
+    
+    .instructions ol {
+      margin: 0;
+      padding-left: 16px;
+    }
+    
+    .instructions li {
+      margin-bottom: 4px;
+    }
+    
+    .status {
+      text-align: center;
+      font-size: 12px;
+      margin-top: 8px;
+      padding: 8px;
+      border-radius: 4px;
+    }
+    
+    .status.success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    
+    .status.error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>智能文本助手</h1>
+  </div>
+  
+  <div class="info-section">
+    <h3>配置信息</h3>
+    <div class="config-info">
+      <h4>API配置说明：</h4>
+      <p>API配置已集成到插件中，无需在此处设置。</p>
+      <p>如需修改配置，请编辑项目中的 <code>config.js</code> 文件。</p>
+    </div>
+    <div class="status" id="configStatus">正在检查配置...</div>
+  </div>
+  
+  <div class="instructions">
+    <h4>使用说明：</h4>
+    <ol>
+      <li>在网页上选中任意文本</li>
+      <li>悬浮弹窗会自动出现</li>
+      <li>点击相应功能按钮使用</li>
+      <li>支持解释、翻译、朗读、润色功能</li>
+    </ol>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
