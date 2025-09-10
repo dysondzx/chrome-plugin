@@ -366,14 +366,150 @@
       throw new Error('请先配置Kimi API Key');
     }
     
-    // 检测文本语言
-    const isChinese = /[\u4e00-\u9fa5]/.test(selectedText);
-    const targetLang = isChinese ? '英文' : '中文';
+    // 显示语言选择界面
+    showTranslateSelection();
+  }
+  
+  /**
+   * 显示翻译语言选择界面
+   */
+  function showTranslateSelection() {
+    const content = document.getElementById('panel-content');
+    content.innerHTML = `
+      <div class="result-section">
+        <div class="result-label">选中文本：</div>
+        <div class="selected-text">"${selectedText}"</div>
+        <div class="result-label">翻译目标：</div>
+        <div class="translate-selection">
+          <select id="translate-target-lang" class="language-dropdown">
+            <option value="zh">中文</option>
+            <option value="en">英文</option>
+            <option value="ja">日文</option>
+            <option value="ko">韩文</option>
+          </select>
+          <button id="confirm-translate-btn" class="translate-button">翻译</button>
+        </div>
+        <div class="result-label">翻译结果：</div>
+        <div id="translation-result-container" class="result-content">
+          <!-- 翻译结果将在这里显示 -->
+        </div>
+      </div>
+    `;
     
-    const prompt = `请将以下文本翻译成${targetLang}：\n\n"${selectedText}"\n\n只返回翻译结果，不要其他内容。`;
-    const result = await callKimiAPI(prompt);
+    // 绑定确认翻译按钮事件
+    const confirmBtn = document.getElementById('confirm-translate-btn');
+    confirmBtn.addEventListener('click', performTranslation);
     
-    showTranslateResult(result, targetLang);
+    // 防止内容区域点击事件冒泡
+    content.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+    
+    // 显示结果后重新计算面板位置
+    setTimeout(() => {
+      updatePanelPosition();
+    }, 10);
+  }
+  
+  /**
+   * 执行翻译操作
+   */
+  async function performTranslation() {
+    try {
+      // 先获取选择的目标语言
+      const langSelect = document.getElementById('translate-target-lang');
+      
+      // 检查元素是否存在
+      if (!langSelect) {
+        throw new Error('无法获取语言选择元素');
+      }
+      
+      const langValue = langSelect.value;
+      const targetLang = {
+        'zh': '中文',
+        'en': '英文',
+        'ja': '日文',
+        'ko': '韩文'
+      }[langValue];
+      
+      // 获取结果容器
+      const resultContainer = document.getElementById('translation-result-container');
+      if (!resultContainer) {
+        throw new Error('无法获取结果容器');
+      }
+      
+      // 显示加载状态（但不替换整个界面）
+      resultContainer.innerHTML = '<div class="loading-spinner"></div><div class="loading-text">正在翻译中...</div>';
+      
+      const prompt = `请将以下文本翻译成${targetLang}：\n\n"${selectedText}"\n\n只返回翻译结果，不要其他内容。`;
+      const result = await callKimiAPI(prompt);
+      
+      // 只更新翻译结果内容，不改变其他部分
+      resultContainer.innerHTML = result;
+      
+      // 显示结果后重新计算面板位置
+      setTimeout(() => {
+        updatePanelPosition();
+      }, 10);
+      
+    } catch (error) {
+      console.error('翻译失败:', error);
+      
+      // 获取结果容器
+      const resultContainer = document.getElementById('translation-result-container');
+      if (resultContainer) {
+        resultContainer.innerHTML = `<div class="error-icon">❌</div><div class="error-text">翻译失败</div><div class="error-detail">${error.message}</div>`;
+      } else {
+        // 如果找不到容器，使用备用错误显示方式
+        showErrorState('translate', error.message);
+      }
+    } finally {
+      isProcessing = false;
+    }
+  }
+  
+  // 移除showTranslateResult函数，因为我们不再需要它
+  /**
+   * 显示翻译结果
+   * @param {string} result - 翻译结果
+   * @param {string} targetLang - 目标语言
+   */
+  function showTranslateResult(result, targetLang) {
+    console.log('显示翻译结果:', result);
+    
+    const content = document.getElementById('panel-content');
+    content.innerHTML = `
+      <div class="result-section">
+        <div class="result-label">选中文本：</div>
+        <div class="selected-text">"${selectedText}"</div>
+        <div class="result-label">翻译目标：</div>
+        <div class="target-lang">${targetLang}</div>
+        <div class="result-label">翻译结果：</div>
+        <div class="result-content">${result}</div>
+      </div>
+    `;
+    
+    // 防止内容区域点击事件冒泡
+    content.addEventListener('click', function(e) {
+      console.log('内容区域点击事件被阻止');
+      e.stopPropagation();
+    });
+    
+    // 显示结果后重新计算面板位置
+    setTimeout(() => {
+      console.log('重新计算面板位置');
+      updatePanelPosition();
+      
+      // 强制确保面板可见
+      if (floatingPanel) {
+        floatingPanel.style.display = 'block';
+        floatingPanel.classList.add('show');
+        isPanelVisible = true;
+        console.log('强制确保面板可见');
+      }
+    }, 10);
+    
+    console.log('翻译结果显示完成，面板可见状态:', isPanelVisible);
   }
   
   /**
@@ -514,49 +650,6 @@
     }, 10);
     
     console.log('解释结果显示完成，面板可见状态:', isPanelVisible);
-  }
-  
-  /**
-   * 显示翻译结果
-   * @param {string} result - 翻译结果
-   * @param {string} targetLang - 目标语言
-   */
-  function showTranslateResult(result, targetLang) {
-    console.log('显示翻译结果:', result);
-    
-    const content = document.getElementById('panel-content');
-    content.innerHTML = `
-      <div class="result-section">
-        <div class="result-label">选中文本：</div>
-        <div class="selected-text">"${selectedText}"</div>
-        <div class="result-label">翻译目标：</div>
-        <div class="target-lang">${targetLang}</div>
-        <div class="result-label">翻译结果：</div>
-        <div class="result-content">${result}</div>
-      </div>
-    `;
-    
-    // 防止内容区域点击事件冒泡
-    content.addEventListener('click', function(e) {
-      console.log('内容区域点击事件被阻止');
-      e.stopPropagation();
-    });
-    
-    // 显示结果后重新计算面板位置
-    setTimeout(() => {
-      console.log('重新计算面板位置');
-      updatePanelPosition();
-      
-      // 强制确保面板可见
-      if (floatingPanel) {
-        floatingPanel.style.display = 'block';
-        floatingPanel.classList.add('show');
-        isPanelVisible = true;
-        console.log('强制确保面板可见');
-      }
-    }, 10);
-    
-    console.log('翻译结果显示完成，面板可见状态:', isPanelVisible);
   }
   
   /**
@@ -790,6 +883,7 @@
   window.speakText = speakText;
   window.pauseTTS = pauseTTS;
   window.stopTTS = stopTTS;
+  window.performTranslation = performTranslation;
   
   // TTS控制函数
   async function speakText(text, lang) {
