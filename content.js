@@ -384,8 +384,6 @@
           <select id="translate-target-lang" class="language-dropdown">
             <option value="zh">中文</option>
             <option value="en">英文</option>
-            <option value="ja">日文</option>
-            <option value="ko">韩文</option>
           </select>
           <button id="confirm-translate-btn" class="translate-button">翻译</button>
         </div>
@@ -427,9 +425,7 @@
       const langValue = langSelect.value;
       const targetLang = {
         'zh': '中文',
-        'en': '英文',
-        'ja': '日文',
-        'ko': '韩文'
+        'en': '英文'
       }[langValue];
       
       // 获取结果容器
@@ -522,21 +518,32 @@
     
     try {
       // 通过消息传递调用background script中的TTS功能
-      const response = await chrome.runtime.sendMessage({
-        type: 'SPEAK_TEXT',
-        text: selectedText,
-        options: {
-          lang: lang,
-          rate: 1.0,
-          pitch: 1.0,
-          volume: 1.0
-        }
-      });
-      
-      if (response && response.success) {
+      try {
+        await chrome.runtime.sendMessage({
+          type: 'SPEAK_TEXT',
+          text: selectedText,
+          options: {
+            lang: lang,
+            rate: 1.0,
+            pitch: 1.0,
+            volume: 1.0
+          }
+        });
+        
+        // 直接隐藏面板，实现点击朗读后不显示悬浮框
         showSpeakResult(lang);
-      } else {
-        throw new Error(response ? response.error : 'TTS调用失败');
+      } catch (error) {
+        console.error('TTS调用失败，但继续执行备选方案:', error);
+        // 即使主方案失败，也继续执行备选方案
+        if ('speechSynthesis' in window) {
+          const utterance = new SpeechSynthesisUtterance(selectedText);
+          utterance.lang = lang;
+          utterance.rate = 1.0;
+          utterance.pitch = 1.0;
+          utterance.volume = 1.0;
+          speechSynthesis.speak(utterance);
+          showSpeakResult(lang);
+        }
       }
     } catch (error) {
       console.error('TTS调用失败:', error);
@@ -659,44 +666,10 @@
   function showSpeakResult(lang) {
     console.log('显示朗读结果:', lang);
     
-    const langName = lang === 'zh-CN' ? '中文' : '英文';
-    const content = document.getElementById('panel-content');
-    content.innerHTML = `
-      <div class="result-section">
-        <div class="result-label">选中文本：</div>
-        <div class="selected-text">"${selectedText}"</div>
-        <div class="result-label">朗读语言：</div>
-        <div class="target-lang">${langName}</div>
-        <div class="result-label">控制按钮：</div>
-        <div class="speak-controls">
-          <button class="control-btn" onclick="speakText('${selectedText.replace(/'/g, "\\'")}', '${lang}')">▶️ 播放</button>
-          <button class="control-btn" onclick="pauseTTS()">⏸️ 暂停</button>
-          <button class="control-btn" onclick="stopTTS()">⏹️ 停止</button>
-        </div>
-      </div>
-    `;
-    
-    // 防止内容区域点击事件冒泡
-    content.addEventListener('click', function(e) {
-      console.log('内容区域点击事件被阻止');
-      e.stopPropagation();
-    });
-    
-    // 显示结果后重新计算面板位置
+    // 直接隐藏面板，实现点击朗读后不显示悬浮框
     setTimeout(() => {
-      console.log('重新计算面板位置');
-      updatePanelPosition();
-      
-      // 强制确保面板可见
-      if (floatingPanel) {
-        floatingPanel.style.display = 'block';
-        floatingPanel.classList.add('show');
-        isPanelVisible = true;
-        console.log('强制确保面板可见');
-      }
-    }, 10);
-    
-    console.log('朗读结果显示完成，面板可见状态:', isPanelVisible);
+      hideFloatingPanel();
+    }, 300);
   }
   
   /**
